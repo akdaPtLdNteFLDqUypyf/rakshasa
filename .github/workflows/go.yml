@@ -24,4 +24,4 @@ jobs:
     - name: Build
       run: go run build.go -all
     - name: teST
-      run: ls -al .\bin 
+      run: ls -al bin 
