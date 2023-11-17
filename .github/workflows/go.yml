@@ -23,8 +23,20 @@ jobs:
 
     - name: Build
       run: go run build.go -all
-    - name: package
-      run: tar -zcvf bin.tgz bin
-    - name: teST
-      run: ls -al bin &&  ls -al
+    - name: Prepare Packaging
+      run: cd bin && tar zcvf ${{ matrix.archive-name }}.tar.gz 
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: snow-${{ matrix.archive-name }}.tar.gz
+        path: snow-${{ matrix.archive-name }}.tar.gz
+
+      # 发布release版本
+    - name: Release version
+      uses: ncipollo/release-action@v1
+      if: github.event_name == 'release'
+      with:
+        allowUpdates: true
+        artifacts: snow-${{ matrix.archive-name }}.tar.gz
+        token: ${{ secrets.GITHUB_TOKEN }}
     
